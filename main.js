@@ -1,5 +1,6 @@
 'use strict';
 
+let colors = require('colors');
 const assert = require('assert');
 const readline = require('readline');
 const rl = readline.createInterface({
@@ -28,13 +29,40 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const generateHint = () =>  {
-  // your code here
+const generateHint = (guess) =>  {
+  let solutionArray = solution.split('') // 'abcd' => ['a','b','c','d']
+  let guessArray = guess.split('')       // 'dddd' => ['c','z','z','d']
+  let correctLetterLocations = 0
+  let correctLetters = 0
+  let hint
+  for (let i = 0; i < solutionArray.length; i++) {
+    if(solutionArray[i] === guessArray[i]){
+      correctLetterLocations++
+      solutionArray[i] = null
+    }
+  }
+  for (let i = 0; i < solutionArray.length; i++) {
+    if(guessArray.indexOf(solutionArray[i]) != -1) {
+      correctLetters++
+      solutionArray[i]
+    }
+  }
+  hint = `| ${guess} | ${colors.red(correctLetterLocations, 'correct letter in the correct location(s)')} - ${colors.yellow(correctLetters, 'correct letter(s) in an incorrect location')}`
+  board.push(hint)
+  if (board.length > 9) {
+    console.log('Sorry, you do not have any more gueses left')
+    console.log(`The solution is: ${colors.rainbow(solution)}`)
+    board = []
+  }
 }
 
 const mastermind = (guess) => {
-  solution = 'abcd'; // Comment this out to generate a random solution
-  // your code here
+  // solution = 'abcd';
+  if(guess === solution) {
+    console.log('You guessed it!')
+  } else {
+    generateHint(guess)
+  }
 }
 
 
